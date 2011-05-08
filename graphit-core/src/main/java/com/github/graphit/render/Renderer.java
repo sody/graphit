@@ -1,11 +1,12 @@
-package com.github.graphit;
+package com.github.graphit.render;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.io.Writer;
 
 /**
  * @author Ivan Khalopik
- * @since 1.1
+ * @since 1.0
  */
 public interface Renderer {
 
@@ -13,5 +14,5 @@ public interface Renderer {
 
 	Renderer rectangle(int x, int y, int width, int height);
 
-	void write(OutputStream stream) throws IOException;
+	void render(OutputStream stream) throws IOException;
 }

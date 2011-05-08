@@ -1,4 +1,4 @@
-package com.github.graphit;
+package com.github.graphit.model;
 
 import java.util.List;
 

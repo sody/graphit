@@ -1,15 +1,14 @@
-package com.github.graphit;
+package com.github.graphit.theme;
+
+import com.github.graphit.model.Edge;
+import com.github.graphit.model.Node;
+import com.github.graphit.render.Renderer;
 
 /**
  * @author Ivan Khalopik
  * @since 1.1
  */
 public class DummyTheme implements Theme {
-	private static final String THEME_ID = "dummy";
-
-	public String getId() {
-		return THEME_ID;
-	}
 
 	public void renderNode(final Renderer renderer, final Node node, final int x, final int y, final int width, final int height) {
 		renderer.rectangle(x, y, width, height);

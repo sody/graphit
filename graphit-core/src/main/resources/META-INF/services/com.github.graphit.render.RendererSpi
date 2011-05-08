@@ -1,0 +1,2 @@
+com.github.graphit.render.RasterRendererSpi
+com.github.graphit.render.SvgRendererSpi

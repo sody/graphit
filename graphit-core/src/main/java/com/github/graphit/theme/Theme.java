@@ -1,12 +1,14 @@
-package com.github.graphit;
+package com.github.graphit.theme;
+
+import com.github.graphit.model.Edge;
+import com.github.graphit.model.Node;
+import com.github.graphit.render.Renderer;
 
 /**
  * @author Ivan Khalopik
  * @since 1.1
  */
 public interface Theme {
-
-	String getId();
 
 	void renderNode(Renderer renderer, Node node, int x, int y, int width, int height);
 

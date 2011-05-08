@@ -1,10 +1,16 @@
 package com.github.graphit;
 
+import com.github.graphit.layout.Layout;
+import com.github.graphit.layout.LayoutSpi;
+import com.github.graphit.model.Node;
+import com.github.graphit.render.Renderer;
+import com.github.graphit.render.RendererSpi;
+import com.github.graphit.theme.Theme;
+import com.github.graphit.theme.ThemeSpi;
+
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.ServiceLoader;
 
 /**
@@ -12,50 +18,47 @@ import java.util.ServiceLoader;
  * @since 1.1
  */
 public class GraphIt {
-	private static final ServiceLoader<Theme> themes = ServiceLoader.load(Theme.class);
-	private static final ServiceLoader<Layout> layouts = ServiceLoader.load(Layout.class);
+	private static final ServiceLoader<RendererSpi> renderers = ServiceLoader.load(RendererSpi.class);
+	private static final ServiceLoader<ThemeSpi> themes = ServiceLoader.load(ThemeSpi.class);
+	private static final ServiceLoader<LayoutSpi> layouts = ServiceLoader.load(LayoutSpi.class);
 
-	private static final Map<String, Renderer> renderers = new HashMap<String, Renderer>();
-
-	static {
-		renderers.put("svg", new SvgRenderer());
-	}
-
-	public static void createGraph(final String layout, final String theme, final String renderer,
+	public static void createGraph(final String layoutId, final String themeId, final String rendererType,
 								   final List<Node> nodes) {
-		final Layout layoutInstance = getLayout(layout);
-		final Theme themeInstance = getTheme(theme);
-		final Renderer rendererInstance = createRenderer(renderer);
+		final Layout layout = getLayout(layoutId);
+		final Theme theme = getTheme(themeId);
+		final Renderer renderer = createRenderer(rendererType, 1000, 1000);
 
-		layoutInstance.renderGraph(rendererInstance, themeInstance, nodes);
+		layout.apply(renderer, theme, nodes);
 
 		try {
-			rendererInstance.write(new FileOutputStream("some.svg"));
+			renderer.render(new FileOutputStream("some." + rendererType));
 		} catch (IOException e) {
-			e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+			e.printStackTrace();
 		}
 	}
 
-	private static Renderer createRenderer(final String id) {
-		if (!renderers.containsKey(id)) {
-			throw new IllegalArgumentException("There are no such layout configured: " + id);
+	private static Renderer createRenderer(final String type, final int width, final int height) {
+		for (RendererSpi rendererSpi : renderers) {
+			if (rendererSpi.supports(type)) {
+				return rendererSpi.create(type, width, height);
+			}
 		}
-		return renderers.get(id);
+		throw new IllegalArgumentException("There are no such layout configured: " + type);
 	}
 
 	private static Layout getLayout(final String id) {
-		for (Layout layout : layouts) {
-			if (layout.getId().equals(id)) {
-				return layout;
+		for (LayoutSpi layoutSpi : layouts) {
+			if (layoutSpi.supports(id)) {
+				return layoutSpi.get(id);
 			}
 		}
 		throw new IllegalArgumentException("There are no such layout configured: " + id);
 	}
 
 	private static Theme getTheme(final String id) {
-		for (Theme theme : themes) {
-			if (theme.getId().equals(id)) {
-				return theme;
+		for (ThemeSpi themeSpi : themes) {
+			if (themeSpi.supports(id)) {
+				return themeSpi.get(id);
 			}
 		}
 		throw new IllegalArgumentException("There are no such theme configured: " + id);

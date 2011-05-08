@@ -1,5 +1,7 @@
 package com.github.graphit;
 
+import com.github.graphit.model.Edge;
+import com.github.graphit.model.Node;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
@@ -20,6 +22,7 @@ public class GraphItTest extends Assert {
 		nodes.add(new NodeImpl("C"));
 
 		GraphIt.createGraph("dummy", "dummy", "svg", nodes);
+		GraphIt.createGraph("dummy", "dummy", "png", nodes);
 	}
 
 	public static class NodeImpl implements Node {
