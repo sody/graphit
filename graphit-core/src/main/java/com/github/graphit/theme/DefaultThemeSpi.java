@@ -2,7 +2,7 @@ package com.github.graphit.theme;
 
 /**
  * @author Ivan Khalopik
- * @since 1.1
+ * @since 1.0
  */
 public class DefaultThemeSpi implements ThemeSpi {
 	private static final Theme THEME = new DummyTheme();

@@ -15,7 +15,7 @@ import java.util.ServiceLoader;
 
 /**
  * @author Ivan Khalopik
- * @since 1.1
+ * @since 1.0
  */
 public class GraphIt {
 	private static final ServiceLoader<RendererSpi> renderers = ServiceLoader.load(RendererSpi.class);

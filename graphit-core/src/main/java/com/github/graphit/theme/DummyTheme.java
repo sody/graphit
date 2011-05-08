@@ -6,7 +6,7 @@ import com.github.graphit.render.Renderer;
 
 /**
  * @author Ivan Khalopik
- * @since 1.1
+ * @since 1.0
  */
 public class DummyTheme implements Theme {
 

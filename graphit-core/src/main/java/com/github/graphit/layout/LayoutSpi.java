@@ -2,7 +2,7 @@ package com.github.graphit.layout;
 
 /**
  * @author Ivan Khalopik
- * @since 1.1
+ * @since 1.0
  */
 public interface LayoutSpi {
 
