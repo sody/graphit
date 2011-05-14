@@ -5,7 +5,7 @@ package com.github.graphit.layout;
  * @since 1.0
  */
 public class DefaultLayoutSpi implements LayoutSpi {
-	private static final Layout LAYOUT = new DummyLayout();
+	private static final Layout LAYOUT = new CircleLayout();
 
 	@Override
 	public boolean supports(final String id) {

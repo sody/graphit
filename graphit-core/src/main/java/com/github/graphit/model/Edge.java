@@ -6,11 +6,7 @@ package com.github.graphit.model;
  */
 public interface Edge {
 
-	String getName();
-
 	String getType();
 
-	Node getSource();
-
-	Node getTarget();
+	String getName();
 }

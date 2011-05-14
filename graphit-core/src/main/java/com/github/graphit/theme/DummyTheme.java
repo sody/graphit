@@ -1,8 +1,10 @@
 package com.github.graphit.theme;
 
-import com.github.graphit.model.Edge;
+import com.github.graphit.model.BoundedGraph;
 import com.github.graphit.model.Node;
 import com.github.graphit.render.Renderer;
+
+import java.awt.geom.Rectangle2D;
 
 /**
  * @author Ivan Khalopik
@@ -10,11 +12,11 @@ import com.github.graphit.render.Renderer;
  */
 public class DummyTheme implements Theme {
 
-	public void renderNode(final Renderer renderer, final Node node, final int x, final int y, final int width, final int height) {
-		renderer.rectangle(x, y, width, height);
-	}
-
-	public void renderEdge(final Renderer renderer, final Edge edge, final int x1, final int y1, final int x2, final int y2) {
-		renderer.line(x1, y1, x2, y2);
+	@Override
+	public void renderGraph(final BoundedGraph graph, final Renderer renderer) {
+		for (Node node : graph.getNodes()) {
+			final Rectangle2D bounds = graph.getNodeBounds(node);
+			renderer.rectangle((int) bounds.getX(), (int) bounds.getY(), (int) bounds.getWidth(), (int) bounds.getHeight());
+		}
 	}
 }

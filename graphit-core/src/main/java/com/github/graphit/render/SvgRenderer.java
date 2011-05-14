@@ -14,31 +14,34 @@ public class SvgRenderer implements Renderer {
 
 	public SvgRenderer(final int width, final int height) {
 		builder.append("<svg xmlns=\"http://www.w3.org/2000/svg\"").append('\n')
-				.append('\t').append("xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"").append("\n")
-				.append('\t').append("xsi:schemaLocation=\"http://www.w3.org/2000/svg http://www.w3.org/TR/2002/WD-SVG11-20020108/SVG.xsd\">");
+				.append('\t').append("xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"").append('\n')
+				.append('\t').append("xsi:schemaLocation=\"http://www.w3.org/2000/svg http://www.w3.org/TR/2002/WD-SVG11-20020108/SVG.xsd\">")
+				.append('\n');
 	}
 
 	@Override
 	public Renderer line(final int x1, final int y1, final int x2, final int y2) {
 		locker.check();
-		builder.append("<line")
+		builder.append('\t')
+				.append("<line")
 				.append(" x1=\"").append(x1).append("\"")
 				.append(" y1=\"").append(y1).append("\"")
 				.append(" x2=\"").append(x2).append("\"")
 				.append(" y2=\"").append(y2).append("\"")
-				.append("/>");
+				.append("/>").append('\n');
 		return this;
 	}
 
 	@Override
 	public Renderer rectangle(final int x, final int y, final int width, final int height) {
 		locker.check();
-		builder.append("<rect")
+		builder.append('\t')
+				.append("<rect")
 				.append(" x=\"").append(x).append("\"")
 				.append(" y=\"").append(y).append("\"")
 				.append(" width=\"").append(width).append("\"")
 				.append(" height=\"").append(height).append("\"")
-				.append("/>");
+				.append("/>").append('\n');
 		return this;
 	}
 
