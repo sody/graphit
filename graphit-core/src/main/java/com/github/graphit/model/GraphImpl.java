@@ -1,29 +1,25 @@
 package com.github.graphit.model;
 
-import java.util.ArrayList;
+import java.awt.geom.Dimension2D;
 import java.util.Collection;
-import java.util.Map;
+import java.util.HashSet;
 
 /**
  * @author Ivan Khalopik
- * @since 1.1
+ * @since 1.0
  */
 public class GraphImpl implements Graph {
 	private final Collection<Node> nodes;
 	private final Collection<Edge> edges;
-	private final Map<Node, Collection<Edge>> incomingEdges;
-	private final Map<Node, Collection<Edge>> outgoingEdges;
 
+	private Dimension2D size;
 
-	protected GraphImpl(final Map<Node, Collection<Edge>> incomingEdges,
-						final Map<Node, Collection<Edge>> outgoingEdges) {
-		this.incomingEdges = incomingEdges;
-		this.outgoingEdges = outgoingEdges;
+	public GraphImpl(final Collection<Node> nodes) {
+		this.nodes = nodes;
 
-		this.nodes = new ArrayList<Node>(incomingEdges.keySet());
-		this.edges = new ArrayList<Edge>();
-		for (Collection<Edge> nodeEdges : incomingEdges.values()) {
-			edges.addAll(nodeEdges);
+		edges = new HashSet<Edge>();
+		for (Node node : nodes) {
+			edges.addAll(node.getOutgoingEdges());
 		}
 	}
 
@@ -38,12 +34,12 @@ public class GraphImpl implements Graph {
 	}
 
 	@Override
-	public Collection<Edge> getIncomingEdges(final Node node) {
-		return incomingEdges.get(node);
+	public Dimension2D getSize() {
+		return size;
 	}
 
 	@Override
-	public Collection<Edge> getOutgoingEdges(final Node node) {
-		return outgoingEdges.get(node);
+	public void setSize(final Dimension2D size) {
+		this.size = size;
 	}
 }

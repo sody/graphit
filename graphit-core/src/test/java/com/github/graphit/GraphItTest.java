@@ -7,7 +7,7 @@ import org.testng.annotations.Test;
 
 /**
  * @author Ivan Khalopik
- * @since 1.1
+ * @since 1.0
  */
 public class GraphItTest extends Assert {
 
@@ -20,6 +20,10 @@ public class GraphItTest extends Assert {
 				.addNode("C")
 				.addNode("D")
 				.addNode("E");
+
+		builder.addEdge("A", "D");
+		builder.addEdge("E", "B");
+		builder.addEdge("A", "B");
 
 		final Graph graph = builder.build();
 		GraphIt.createGraph("dummy", "dummy", "svg", graph);

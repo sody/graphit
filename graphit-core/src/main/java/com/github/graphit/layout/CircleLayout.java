@@ -1,34 +1,37 @@
 package com.github.graphit.layout;
 
-import com.github.graphit.model.BoundedGraph;
-import com.github.graphit.model.BoundedGraphImpl;
 import com.github.graphit.model.Graph;
 import com.github.graphit.model.Node;
 
-import java.awt.geom.Rectangle2D;
+import java.awt.*;
+import java.awt.geom.Point2D;
 
 /**
  * @author Ivan Khalopik
- * @since 1.1
+ * @since 1.0
  */
 public class CircleLayout implements Layout {
 
 	@Override
-	public BoundedGraph apply(final Graph graph) {
-		final BoundedGraph result = new BoundedGraphImpl(graph);
-
+	public void apply(final Graph graph) {
 		final int count = graph.getNodes().size();
 		final double max = 100;
 		final double r = count * max / Math.PI;
 		final double phi = 2 * Math.PI / count;
 
+		if (graph.getSize() == null) {
+			final int graphMax = (int) (3 * r);
+			graph.setSize(new Dimension(graphMax, graphMax));
+		}
 		int i = 0;
 		for (Node node : graph.getNodes()) {
-			final int x = (int) (r + r * Math.sin(i * phi));
-			final int y = (int) (r + r * Math.cos(i * phi));
-			result.setNodeBounds(node, new Rectangle2D.Double(x, y, max, max));
+			if (node.getSize() == null) {
+				node.setSize(new Dimension(100, 100));
+			}
+			final double x = (r + r * Math.sin(i * phi));
+			final double y = (r + r * Math.cos(i * phi));
+			node.setPosition(new Point2D.Double(x, y));
 			i++;
 		}
-		return result;
 	}
 }

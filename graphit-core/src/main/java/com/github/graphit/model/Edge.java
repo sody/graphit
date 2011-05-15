@@ -9,4 +9,8 @@ public interface Edge {
 	String getType();
 
 	String getName();
+
+	Node getSource();
+
+	Node getTarget();
 }

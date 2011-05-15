@@ -1,35 +1,35 @@
 package com.github.graphit.model;
 
-import java.util.Collection;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
 
 /**
  * @author Ivan Khalopik
- * @since 1.1
+ * @since 1.0
  */
 public class GraphBuilder {
 	private final Map<String, Node> nodes = new HashMap<String, Node>();
-	private final Map<Node, Collection<Edge>> incomingEdges = new HashMap<Node, Collection<Edge>>();
-	private final Map<Node, Collection<Edge>> outgoingEdges = new HashMap<Node, Collection<Edge>>();
 
 	public GraphBuilder addNode(final String id) {
-		return addNode(id, null);
+		return addNode(new NodeImpl(id, null, id));
 	}
 
 	public GraphBuilder addNode(final String id, final String type) {
-		assert id != null;
-
-		return addNode(new NodeImpl(id, type, null));
+		return addNode(new NodeImpl(id, type, id));
 	}
 
 	public GraphBuilder addNode(final Node node) {
-		assert node != null;
+		validateNode(node);
 
-		nodes.put(node.getId(), node);
-		incomingEdges.put(node, new HashSet<Edge>());
-		outgoingEdges.put(node, new HashSet<Edge>());
+		nodes.put(node.getName(), node);
+		return this;
+	}
+
+	public GraphBuilder addNode(final String id, final Node node) {
+		assert id != null;
+		validateNode(node);
+
+		nodes.put(id, node);
 		return this;
 	}
 
@@ -43,37 +43,62 @@ public class GraphBuilder {
 
 		final Node source = nodes.get(sourceId);
 		final Node target = nodes.get(targetId);
-		return addEdge(new EdgeImpl(type, null), source, target);
+		return addEdge(new EdgeImpl(source, target, type, null));
 	}
 
-	public GraphBuilder addEdge(final Edge edge, final Node source, final Node target) {
-		assert edge != null;
-		assert source != null && outgoingEdges.containsKey(source);
-		assert target != null && incomingEdges.containsKey(target);
-
-		incomingEdges.get(target).add(edge);
-		outgoingEdges.get(source).add(edge);
-		return this;
+	public GraphBuilder addEdge(final String type, final Node source, final Node target) {
+		return addEdge(new EdgeImpl(source, target, type, null));
 	}
 
-	public GraphBuilder addGraph(final Graph graph) {
-		assert graph != null;
+	public GraphBuilder addEdge(final Edge edge) {
+		validateEdge(edge);
 
-		for (Node node : graph.getNodes()) {
-			final Collection<Edge> incoming = new HashSet<Edge>();
-			final Collection<Edge> outgoing = new HashSet<Edge>();
-			incoming.addAll(graph.getIncomingEdges(node));
-			outgoing.addAll(graph.getOutgoingEdges(node));
-
-			nodes.put(node.getId(), node);
-			incomingEdges.put(node, incoming);
-			outgoingEdges.put(node, outgoing);
+		if (!edge.getSource().getOutgoingEdges().contains(edge)) {
+			((NodeImpl) edge.getSource()).addOutgoingEdge(edge); //todo: class cast exception
+		}
+		if (!edge.getTarget().getIncomingEdges().contains(edge)) {
+			((NodeImpl) edge.getTarget()).addIncomingEdge(edge); //todo: class cast exception
 		}
 		return this;
 	}
 
+	public GraphBuilder addGraph(final Graph graph) {
+		validateGraph(graph);
+
+		for (Node node : graph.getNodes()) {
+			addNode(node);
+		}
+
+		for (Edge edge : graph.getEdges()) {
+			addEdge(edge);
+		}
+		return this;
+	}
 
 	public Graph build() {
-		return new GraphImpl(incomingEdges, outgoingEdges);
+		return new GraphImpl(nodes.values());
+	}
+
+	private void validateGraph(final Graph graph) {
+		assert graph != null;
+		assert graph.getNodes() != null;
+		assert graph.getEdges() != null;
+	}
+
+	private void validateNode(final Node node) {
+		assert node != null;
+		assert node.getName() != null;
+		assert node.getIncomingEdges() != null;
+		assert node.getOutgoingEdges() != null;
+		assert !nodes.containsKey(node.getName());
+		assert !nodes.containsValue(node);
+	}
+
+	private void validateEdge(final Edge edge) {
+		assert edge != null;
+		assert edge.getSource() != null;
+		assert edge.getTarget() != null;
+		assert nodes.containsValue(edge.getSource());
+		assert nodes.containsValue(edge.getTarget());
 	}
 }

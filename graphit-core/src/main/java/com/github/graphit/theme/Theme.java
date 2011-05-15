@@ -1,8 +1,6 @@
 package com.github.graphit.theme;
 
-import com.github.graphit.model.BoundedGraph;
-import com.github.graphit.model.Edge;
-import com.github.graphit.model.Node;
+import com.github.graphit.model.Graph;
 import com.github.graphit.render.Renderer;
 
 /**
@@ -11,6 +9,6 @@ import com.github.graphit.render.Renderer;
  */
 public interface Theme {
 
-	void renderGraph(BoundedGraph graph, Renderer renderer);
+	void renderGraph(Graph graph, Renderer renderer);
 
 }

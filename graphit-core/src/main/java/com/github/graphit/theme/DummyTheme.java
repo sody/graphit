@@ -1,10 +1,11 @@
 package com.github.graphit.theme;
 
-import com.github.graphit.model.BoundedGraph;
+import com.github.graphit.model.Graph;
 import com.github.graphit.model.Node;
 import com.github.graphit.render.Renderer;
 
-import java.awt.geom.Rectangle2D;
+import java.awt.geom.Dimension2D;
+import java.awt.geom.Point2D;
 
 /**
  * @author Ivan Khalopik
@@ -13,10 +14,11 @@ import java.awt.geom.Rectangle2D;
 public class DummyTheme implements Theme {
 
 	@Override
-	public void renderGraph(final BoundedGraph graph, final Renderer renderer) {
+	public void renderGraph(final Graph graph, final Renderer renderer) {
 		for (Node node : graph.getNodes()) {
-			final Rectangle2D bounds = graph.getNodeBounds(node);
-			renderer.rectangle((int) bounds.getX(), (int) bounds.getY(), (int) bounds.getWidth(), (int) bounds.getHeight());
+			final Point2D position = node.getPosition();
+			final Dimension2D size = node.getSize();
+			renderer.rectangle((int) position.getX(), (int) position.getY(), (int) size.getWidth(), (int) size.getHeight());
 		}
 	}
 }

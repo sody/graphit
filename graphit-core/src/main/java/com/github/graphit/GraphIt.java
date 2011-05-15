@@ -2,7 +2,6 @@ package com.github.graphit;
 
 import com.github.graphit.layout.Layout;
 import com.github.graphit.layout.LayoutSpi;
-import com.github.graphit.model.BoundedGraph;
 import com.github.graphit.model.Graph;
 import com.github.graphit.render.Renderer;
 import com.github.graphit.render.RendererSpi;
@@ -25,11 +24,12 @@ public class GraphIt {
 	public static void createGraph(final String layoutId, final String themeId, final String rendererType,
 								   final Graph graph) {
 		final Layout layout = getLayout(layoutId);
-		final BoundedGraph boundedGraph = layout.apply(graph);
+		layout.apply(graph);
 
 		final Theme theme = getTheme(themeId);
-		final Renderer renderer = createRenderer(rendererType, 1000, 1000);
-		theme.renderGraph(boundedGraph, renderer);
+		final Renderer renderer = createRenderer(rendererType,
+				(int) graph.getSize().getWidth(), (int) graph.getSize().getHeight());
+		theme.renderGraph(graph, renderer);
 		try {
 			renderer.render(new FileOutputStream("some." + rendererType));
 		} catch (IOException e) {
